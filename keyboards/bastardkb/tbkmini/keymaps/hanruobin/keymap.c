@@ -31,13 +31,49 @@ enum custom_keycodes {
     LAYER3,
 };
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case LT(0,KC_Z):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(C(KC_Z)); // Intercept hold function to send Ctrl-X
+                return false;
+            }
+            return true;             // Return true for normal processing of tap keycode
+        case LT(0,KC_X):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(C(KC_X)); // Intercept hold function to send Ctrl-X
+                return false;
+            }
+            return true;             // Return true for normal processing of tap keycode
+        case LT(0,KC_C):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(C(KC_C)); // Intercept hold function to send Ctrl-C
+                return false;
+            }
+            return true;             // Return true for normal processing of tap keycode
+        case LT(0,KC_V):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(C(KC_V)); // Intercept hold function to send Ctrl-C
+                return false;
+            }
+            return true;             // Return true for normal processing of tap keycode
+        case LT(0,KC_BSPC):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(C(KC_BSPC)); // Intercept hold function to send Ctrl-BSPC
+                return false;
+            }
+            return true;             // Return true for normal processing of tap keycode
+    }
+    return true;
+}
+
  const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
  [_LAYER0] = LAYOUT_split_3x6_3(
     KC_TAB   , KC_Q     , KC_W     , KC_E     , KC_R     , KC_T     ,             KC_Y     , KC_U     , KC_I     , KC_O     , KC_P     , KC_ESC     ,
     LALT_T(KC_ESC)  , KC_A     , KC_S     , KC_D     , KC_F     , KC_G     ,             KC_H     , KC_J     , KC_K     , KC_L     , KC_SCLN  , KC_QUOT    ,
-    KC_LSFT  , KC_Z     , KC_X     , KC_C     , KC_V     , KC_B     ,             KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , KC_RGUI    ,
-                     LCTL_T(KC_DEL), KC_ENT   , LT(1,KC_SPC) ,         MO(2)    , KC_SPC   , KC_BSPC
+    KC_LSFT  ,LT(0,KC_Z),LT(0,KC_X),LT(0,KC_C),LT(0,KC_V), KC_B     ,             KC_N     , KC_M     , KC_COMM  , KC_DOT   , KC_SLSH  , KC_RGUI    ,
+                     LCTL_T(KC_DEL), KC_ENT   , LT(1,KC_SPC) ,         MO(2)    , KC_SPC   , LT(0,KC_BSPC)
     ),
 
 [_LAYER1] = LAYOUT_split_3x6_3(
