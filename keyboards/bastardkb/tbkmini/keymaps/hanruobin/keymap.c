@@ -82,6 +82,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             }
             return true;             // Return true for normal processing of tap keycode
+        case LT(_BASE,KC_Y):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(G(KC_Y)); // Intercept hold function to send Ctrl-V
+                return false;
+            }
+            return true;             // Return true for normal processing of tap keycode
+        case LT(_BASE,KC_N):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(G(KC_N)); // Intercept hold function to send Ctrl-V
+                return false;
+            }
+            return true;             // Return true for normal processing of tap keycode
         case LT(_BASE,KC_BSPC):
             if (!record->tap.count && record->event.pressed) {
                 tap_code16(C(KC_BSPC)); // Intercept hold function to send Ctrl-BSPC
@@ -95,10 +107,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_BASE] = LAYOUT_split_3x6_3(
-    KC_TAB         , KC_Q           , KC_W           , KC_E           , KC_R           , LT(_BASE,KC_T) ,            KC_Y  , KC_U          , KC_I     , KC_O     , KC_P     , QK_CLEAR_EEPROM  ,
-    ALT_T(KC_ESC)  , LT(_BASE,KC_A) , LT(_BASE,KC_S) , KC_D           , LT(_BASE,KC_F) , KC_G           ,            KC_H  , KC_J          , KC_K     , KC_L     , KC_SCLN  , KC_QUOT ,
-    SFT_T(KC_CAPS) , LT(_BASE,KC_Z) , LT(_BASE,KC_X) , LT(_BASE,KC_C) , LT(_BASE,KC_V) , KC_B           ,            KC_N  , KC_M          , KC_COMM  , KC_DOT   , KC_SLSH  , KC_RGUI ,
-                                                      CTL_T(KC_DEL), SFT_T(KC_ENT)  , LT(_SYM,KC_SPC)   ,          MO(_NAV), TD(TD_SPC_TAB), LT(_BASE,KC_BSPC)
+    KC_TAB         , KC_Q           , KC_W           , KC_E           , KC_R           , LT(_BASE,KC_T) ,            LT(_BASE,KC_Y) , KC_U          , KC_I     , KC_O     , KC_P     , QK_CLEAR_EEPROM  ,
+    ALT_T(KC_ESC)  , LT(_BASE,KC_A) , LT(_BASE,KC_S) , KC_D           , LT(_BASE,KC_F) , KC_G           ,            KC_H           , KC_J          , KC_K     , KC_L     , KC_SCLN  , KC_QUOT ,
+    SFT_T(KC_CAPS) , LT(_BASE,KC_Z) , LT(_BASE,KC_X) , LT(_BASE,KC_C) , LT(_BASE,KC_V) , KC_B           ,            LT(_BASE,KC_N) , KC_M          , KC_COMM  , KC_DOT   , KC_SLSH  , KC_RGUI ,
+                                                         CTL_T(KC_DEL), SFT_T(KC_ENT)  , LT(_SYM,KC_SPC),            MO(_NAV)       , TD(TD_SPC_TAB), LT(_BASE,KC_BSPC)
     ),
 
 [_SYM] = LAYOUT_split_3x6_3(
