@@ -96,12 +96,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             return true;             // Return true for normal processing of tap keycode
         case LT(_BASE,KC_BSPC):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(KC_BSPC)); // Intercept hold function to send Ctrl-BSPC
+                tap_code16(A(KC_BSPC)); // Intercept hold function to send Ctrl-BSPC
                 return false;
             }
             return true;             // Return true for normal processing of tap keycode
     }
     return true;
+}
+
+extern rgblight_config_t rgblight_config;
+void keyboard_post_init_user(void) {
+  rgblight_enable_noeeprom();
+  rgblight_sethsv_noeeprom(RGB_ORANGE); // or even sth. like rgblight_sethsv_noeeprom(HSV_TEAL);
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
