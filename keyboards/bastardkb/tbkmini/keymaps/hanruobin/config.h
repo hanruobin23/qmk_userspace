@@ -33,5 +33,6 @@
 #define RP2040_BOOTLOADER_DOUBLE_TAP_RESET_LED GP17
 
 // reduce holding duration to be triggered as a hold
-#define TAPPING_TERM 150
+#define TAPPING_TERM 200
 #define HOLD_ON_OTHER_KEY_PRESS
+// #define HOLD_ON_OTHER_KEY_PRESS
