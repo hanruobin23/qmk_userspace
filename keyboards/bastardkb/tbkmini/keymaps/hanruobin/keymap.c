@@ -18,13 +18,6 @@
 // #include <queue>
 #include QMK_KEYBOARD_H
 
-
-// #define _LAYER0 0
-// #define _LAYER1 1
-// #define _LAYER2 2
-// #define _LAYER3 3
-// #define QMK_FAST_BSPC
-
 enum layers {
     _BASE,
     _SYM,
@@ -48,31 +41,48 @@ tap_dance_action_t tap_dance_actions[] = {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case LT(0,KC_Z):
+        case LT(_BASE,KC_T):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(KC_Z)); // Intercept hold function to send Ctrl-X
+                tap_code16(G(KC_T)); // Intercept hold function to send Ctrl-Z
+                return false;
+            }
+        case LT(_BASE,KC_A):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(G(KC_A)); // Intercept hold function to send Ctrl-Z
                 return false;
             }
             return true;             // Return true for normal processing of tap keycode
-        case LT(0,KC_X):
+        case LT(_BASE,KC_S):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(KC_X)); // Intercept hold function to send Ctrl-X
+                tap_code16(G(KC_S)); // Intercept hold function to send Ctrl-Z
                 return false;
             }
             return true;             // Return true for normal processing of tap keycode
-        case LT(0,KC_C):
+        case LT(_BASE,KC_Z):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(KC_C)); // Intercept hold function to send Ctrl-C
+                tap_code16(G(KC_Z)); // Intercept hold function to send Ctrl-Z
                 return false;
             }
             return true;             // Return true for normal processing of tap keycode
-        case LT(0,KC_V):
+        case LT(_BASE,KC_X):
             if (!record->tap.count && record->event.pressed) {
-                tap_code16(C(KC_V)); // Intercept hold function to send Ctrl-C
+                tap_code16(G(KC_X)); // Intercept hold function to send Ctrl-X
                 return false;
             }
             return true;             // Return true for normal processing of tap keycode
-        case LT(0,KC_BSPC):
+        case LT(_BASE,KC_C):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(G(KC_C)); // Intercept hold function to send Ctrl-C
+                return false;
+            }
+            return true;             // Return true for normal processing of tap keycode
+        case LT(_BASE,KC_V):
+            if (!record->tap.count && record->event.pressed) {
+                tap_code16(G(KC_V)); // Intercept hold function to send Ctrl-V
+                return false;
+            }
+            return true;             // Return true for normal processing of tap keycode
+        case LT(_BASE,KC_BSPC):
             if (!record->tap.count && record->event.pressed) {
                 tap_code16(C(KC_BSPC)); // Intercept hold function to send Ctrl-BSPC
                 return false;
@@ -85,11 +95,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_BASE] = LAYOUT_split_3x6_3(
-KC_TAB         , KC_Q     , KC_W     , KC_E     , KC_R          , KC_T              ,             KC_Y  , KC_U          , KC_I     , KC_O     , KC_P     , KC_ESC  ,
-ALT_T(KC_ESC)  , KC_A     , KC_S     , KC_D     , KC_F          , KC_G              ,             KC_H  , KC_J          , KC_K     , KC_L     , KC_SCLN  , KC_QUOT ,
-KC_LSFT        , KC_Z     , KC_X     , KC_C     , KC_V          , KC_B              ,             KC_N  , KC_M          , KC_COMM  , KC_DOT   , KC_SLSH  , KC_RGUI ,
-                                   CTL_T(KC_DEL), SFT_T(KC_ENT) , LT(_SYM,KC_SPC)   ,           MO(_NAV), TD(TD_SPC_TAB), KC_BSPC
-),
+    KC_TAB         , KC_Q           , KC_W           , KC_E           , KC_R           , LT(_BASE,KC_T) ,            KC_Y  , KC_U          , KC_I     , KC_O     , KC_P     , QK_CLEAR_EEPROM  ,
+    ALT_T(KC_ESC)  , LT(_BASE,KC_A) , LT(_BASE,KC_S) , KC_D           , LT(_BASE,KC_F) , KC_G           ,            KC_H  , KC_J          , KC_K     , KC_L     , KC_SCLN  , KC_QUOT ,
+    SFT_T(KC_CAPS) , LT(_BASE,KC_Z) , LT(_BASE,KC_X) , LT(_BASE,KC_C) , LT(_BASE,KC_V) , KC_B           ,            KC_N  , KC_M          , KC_COMM  , KC_DOT   , KC_SLSH  , KC_RGUI ,
+                                                      CTL_T(KC_DEL), SFT_T(KC_ENT)  , LT(_SYM,KC_SPC)   ,          MO(_NAV), TD(TD_SPC_TAB), LT(_BASE,KC_BSPC)
+    ),
 
 [_SYM] = LAYOUT_split_3x6_3(
     KC_TRNS  , KC_EXLM  , KC_AT    , KC_HASH  , KC_DLR   , KC_PERC  ,             KC_CIRC  , KC_AMPR  , KC_ASTR  , KC_LPRN  , KC_RPRN  , KC_ESC     ,
