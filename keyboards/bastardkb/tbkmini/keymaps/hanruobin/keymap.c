@@ -27,6 +27,7 @@ enum layers {
 
 enum {
     TD_SPC_TAB,
+    TD_DEL_EECLR,
 };
 
 // enum custom_keycodes {
@@ -37,6 +38,7 @@ enum {
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Escape, twice for Caps Lock
     [TD_SPC_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_SPC, KC_TAB),
+    [TD_DEL_EECLR] = ACTION_TAP_DANCE_DOUBLE(KC_DEL, EE_CLR),
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -104,16 +106,36 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-extern rgblight_config_t rgblight_config;
-void keyboard_post_init_user(void) {
-  rgblight_enable_noeeprom();
-  rgblight_sethsv_noeeprom(HSV_ORANGE); // or even sth. like rgblight_sethsv_noeeprom(HSV_TEAL);
+// extern rgblight_config_t rgblight_config;
+// void keyboard_post_init_user(void) {
+//   rgblight_enable_noeeprom();
+//   rgblight_sethsv_noeeprom(HSV_ORANGE); // or even sth. like rgblight_sethsv_noeeprom(HSV_TEAL);
+// }
+
+typedef union {
+  uint32_t raw;
+  struct {
+    bool     rgb_layer_change :1;
+  };
+} user_config_t;
+
+user_config_t user_config;
+
+void eeconfig_init_user(void) {  // EEPROM is getting reset!
+  user_config.raw = 0;
+  user_config.rgb_layer_change = true; // We want this enabled by default
+  eeconfig_update_user(user_config.raw); // Write default value to EEPROM now
+
+  // use the non noeeprom versions, to write these values to EEPROM too
+  rgblight_enable(); // Enable RGB by default
+  rgblight_sethsv(HSV_ORANGE);  // Set it to CYAN by default
+  rgblight_mode(1); // set to solid by default
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_BASE] = LAYOUT_split_3x6_3(
-    KC_TAB         , KC_Q           , KC_W           , KC_E           , KC_R           , KC_T           ,            KC_Y           , KC_U          , KC_I     , KC_O     , KC_P     , QK_CLEAR_EEPROM  ,
+    KC_TAB         , KC_Q           , KC_W           , KC_E           , KC_R           , KC_T           ,            KC_Y           , KC_U          , KC_I     , KC_O     , KC_P     , TD(TD_DEL_EECLR)  ,
     ALT_T(KC_ESC)  , KC_A           , KC_S           , KC_D           , KC_F           , KC_G           ,            KC_H           , KC_J          , KC_K     , KC_L     , KC_SCLN  , KC_QUOT ,
     SFT_T(KC_CAPS) , KC_Z           , KC_X           , KC_C           , KC_V           , KC_B           ,            KC_N           , KC_M          , KC_COMM  , KC_DOT   , KC_SLSH  , KC_RGUI ,
                                                          CTL_T(KC_DEL), SFT_T(KC_ENT)  , LT(_SYM,KC_SPC),            MO(_NAV)       , TD(TD_SPC_TAB), LT(_BASE,KC_BSPC)
