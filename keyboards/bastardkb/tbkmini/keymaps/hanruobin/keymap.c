@@ -25,6 +25,7 @@ enum layers {
     _THIRD
 };
 
+//TAP DANCE CONSTRUCTION
 enum {
     TD_SPC_TAB,
     TD_DEL_EECLR,
@@ -32,10 +33,6 @@ enum {
     TD_BRC,
     TD_CRB,
 };
-
-// enum custom_keycodes {
-//     TD_ESC_CAPS = SAFE_RANGE,
-// };
 
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
@@ -46,70 +43,73 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_BRC] = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, KC_RBRC),
 };
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case LT(_BASE,KC_T):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_T)); // Intercept hold function to send Ctrl-Z
-                return false;
-            }
-        case LT(_BASE,KC_A):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_A)); // Intercept hold function to send Ctrl-Z
-                return false;
-            }
-            return true;             // Return true for normal processing of tap keycode
-        case LT(_BASE,KC_S):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_S)); // Intercept hold function to send Ctrl-Z
-                return false;
-            }
-            return true;             // Return true for normal processing of tap keycode
-        case LT(_BASE,KC_Z):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_Z)); // Intercept hold function to send Ctrl-Z
-                return false;
-            }
-            return true;             // Return true for normal processing of tap keycode
-        case LT(_BASE,KC_X):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_X)); // Intercept hold function to send Ctrl-X
-                return false;
-            }
-            return true;             // Return true for normal processing of tap keycode
-        case LT(_BASE,KC_C):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_C)); // Intercept hold function to send Ctrl-C
-                return false;
-            }
-            return true;             // Return true for normal processing of tap keycode
-        case LT(_BASE,KC_V):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_V)); // Intercept hold function to send Ctrl-V
-                return false;
-            }
-            return true;             // Return true for normal processing of tap keycode
-        case LT(_BASE,KC_Y):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_Y)); // Intercept hold function to send Ctrl-V
-                return false;
-            }
-            return true;             // Return true for normal processing of tap keycode
-        case LT(_BASE,KC_N):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(G(KC_N)); // Intercept hold function to send Ctrl-V
-                return false;
-            }
-            return true;             // Return true for normal processing of tap keycode
-        case LT(_BASE,KC_BSPC):
-            if (!record->tap.count && record->event.pressed) {
-                tap_code16(A(KC_BSPC)); // Intercept hold function to send Ctrl-BSPC
-                return false;
-            }
-            return true;             // Return true for normal processing of tap keycode
-    }
-    return true;
-}
+// TAP HOLDS
+// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+//     switch (keycode) {
+//         case LT(_BASE,KC_T):
+//             if (!record->tap.count && record->event.pressed) {
+//                 tap_code16(G(KC_T)); // Intercept hold function to send Ctrl-Z
+//                 return false;
+//             }
+//         case LT(_BASE,KC_A):
+//             if (!record->tap.count && record->event.pressed) {
+//                 tap_code16(G(KC_A)); // Intercept hold function to send Ctrl-Z
+//                 return false;
+//             }
+//             return true;             // Return true for normal processing of tap keycode
+//         case LT(_BASE,KC_S):
+//             if (!record->tap.count && record->event.pressed) {
+//                 tap_code16(G(KC_S)); // Intercept hold function to send Ctrl-Z
+//                 return false;
+//             }
+//             return true;             // Return true for normal processing of tap keycode
+//         case LT(_BASE,KC_Z):
+//             if (!record->tap.count && record->event.pressed) {
+//                 tap_code16(G(KC_Z)); // Intercept hold function to send Ctrl-Z
+//                 return false;
+//             }
+//             return true;             // Return true for normal processing of tap keycode
+//         case LT(_BASE,KC_X):
+//             if (!record->tap.count && record->event.pressed) {
+//                 tap_code16(G(KC_X)); // Intercept hold function to send Ctrl-X
+//                 return false;
+//             }
+//             return true;             // Return true for normal processing of tap keycode
+//         case LT(_BASE,KC_C):
+//             if (!record->tap.count && record->event.pressed) {
+//                 tap_code16(G(KC_C)); // Intercept hold function to send Ctrl-C
+//                 return false;
+//             }
+//             return true;             // Return true for normal processing of tap keycode
+//         case LT(_BASE,KC_V):
+//             if (!record->tap.count && record->event.pressed) {
+//                 tap_code16(G(KC_V)); // Intercept hold function to send Ctrl-V
+//                 return false;
+//             }
+//             return true;             // Return true for normal processing of tap keycode
+//         case LT(_BASE,KC_Y):
+//             if (!record->tap.count && record->event.pressed) {
+//                 tap_code16(G(KC_Y)); // Intercept hold function to send Ctrl-V
+//                 return false;
+//             }
+//             return true;             // Return true for normal processing of tap keycode
+//         case LT(_BASE,KC_N):
+//             if (!record->tap.count && record->event.pressed) {
+//                 tap_code16(G(KC_N)); // Intercept hold function to send Ctrl-V
+//                 return false;
+//             }
+//             return true;             // Return true for normal processing of tap keycode
+//         case LT(_BASE,KC_BSPC):
+//             if (!record->tap.count && record->event.pressed) {
+//                 tap_code16(A(KC_BSPC)); // Intercept hold function to send Ctrl-BSPC
+//                 return false;
+//             }
+//             return true;             // Return true for normal processing of tap keycode
+//     }
+//     return true;
+// }
+
+// FAILED RGB LIGHTING
 
 // extern rgblight_config_t rgblight_config;
 // void keyboard_post_init_user(void) {
@@ -117,25 +117,65 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 //   rgblight_sethsv_noeeprom(HSV_ORANGE); // or even sth. like rgblight_sethsv_noeeprom(HSV_TEAL);
 // }
 
-typedef union {
-  uint32_t raw;
-  struct {
-    bool     rgb_layer_change :1;
-  };
-} user_config_t;
+// typedef union {
+//   uint32_t raw;
+//   struct {
+//     bool     rgb_layer_change :1;
+//   };
+// } user_config_t;
 
-user_config_t user_config;
+// user_config_t user_config;
 
-void eeconfig_init_user(void) {  // EEPROM is getting reset!
-  user_config.raw = 0;
-  user_config.rgb_layer_change = true; // We want this enabled by default
-  eeconfig_update_user(user_config.raw); // Write default value to EEPROM now
+// void eeconfig_init_user(void) {  // EEPROM is getting reset!
+//   user_config.raw = 0;
+//   user_config.rgb_layer_change = true; // We want this enabled by default
+//   eeconfig_update_user(user_config.raw); // Write default value to EEPROM now
 
-  // use the non noeeprom versions, to write these values to EEPROM too
-  rgblight_enable(); // Enable RGB by default
-  rgblight_sethsv(HSV_ORANGE);  // Set it to CYAN by default
-  rgblight_mode(1); // set to solid by default
+//   // use the non noeeprom versions, to write these values to EEPROM too
+//   rgblight_enable(); // Enable RGB by default
+//   rgblight_sethsv(HSV_ORANGE);  // Set it to CYAN by default
+//   rgblight_mode(1); // set to solid by default
+// }
+
+// ============= DEFINE HOLD ON OTHER KEY PER KEY
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case CTL_T(KC_DEL):
+            // Immediately select the hold action when another key is pressed.
+            return true;
+        case SFT_T(KC_ENT):
+            // Immediately select the hold action when another key is pressed.
+            return true;
+        case SFT_T(KC_CAPS):
+            // Immediately select the hold action when another key is pressed.
+            return true;
+        case ALT_T(KC_ESC):
+            // Immediately select the hold action when another key is pressed.
+            return true;
+        case ALT_T(KC_SPC):
+            // Immediately select the hold action when another key is pressed.
+            return true;
+        case LT(_NAV,KC_TAB):
+            // Immediately select the hold action when another key is pressed.
+            return true;
+        default:
+            // Do not select the hold action when another key is pressed.
+            return false;
+    }
 }
+
+// ==================== COMBO KEYS
+const uint16_t PROGMEM MINS_COMBO[] = {KC_H, KC_J, COMBO_END};
+const uint16_t PROGMEM EQL_COMBO[] = {KC_J, KC_K, COMBO_END};
+const uint16_t PROGMEM GRV_COMBO[] = {KC_K, KC_L, COMBO_END};
+const uint16_t PROGMEM BSLS_COMBO[] = {KC_L, KC_SCLN, COMBO_END};
+
+combo_t key_combos[] = {
+    COMBO(MINS_COMBO, KC_MINS),
+    COMBO(EQL_COMBO, KC_EQL), // keycodes with modifiers are possible too!
+    COMBO(GRV_COMBO,KC_GRV),
+    COMBO(BSLS_COMBO,KC_BSLS),
+};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
@@ -147,7 +187,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
 [_SYM] = LAYOUT_split_3x6_3(
-    KC_TRNS  , KC_TRNS  , KC_7     , KC_8     , KC_9     , TD(TD_PRN)    ,             KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , MO(_THIRD) ,
+    KC_TRNS  , KC_TRNS  , KC_7     , KC_8     , KC_9     , TD(TD_PRN)    ,             KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , EE_CLR     ,
     KC_TRNS  , KC_TRNS  , KC_4     , KC_5     , KC_6     , TD(TD_BRC)    ,             KC_MINS  , KC_EQL   , KC_GRV   , KC_BSLS  , KC_TRNS  , KC_TRNS    ,
     KC_TRNS  , KC_0     , KC_1     , KC_2     , KC_3     , TD(TD_CRB)    ,             KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS    ,
                                      KC_TRNS  , KC_TRNS    , KC_TRNS     ,             KC_TRNS  , KC_TRNS  , KC_TRNS
