@@ -148,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_SYM] = LAYOUT_split_3x6_3(
     KC_TRNS  , KC_TRNS  , KC_7     , KC_8     , KC_9     , TD(TD_PRN)    ,             KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , MO(_THIRD) ,
-    KC_TRNS  , KC_TRNS  , KC_4     , KC_5     , KC_6     , TD(TD_BRC)    ,             KC_TRNS  , KC_MINS  , KC_EQL   , KC_GRV   , KC_BSLS  , KC_TRNS    ,
+    KC_TRNS  , KC_TRNS  , KC_4     , KC_5     , KC_6     , TD(TD_BRC)    ,             KC_MINS  , KC_EQL   , KC_GRV   , KC_BSLS  , KC_TRNS  , KC_TRNS    ,
     KC_TRNS  , KC_0     , KC_1     , KC_2     , KC_3     , TD(TD_CRB)    ,             KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS    ,
                                      KC_TRNS  , KC_TRNS    , KC_TRNS     ,             KC_TRNS  , KC_TRNS  , KC_TRNS
     ),
