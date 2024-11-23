@@ -32,6 +32,10 @@ enum {
     TD_PRN,
     TD_BRC,
     TD_CRB,
+    TD_MINS,
+    TD_EQL,
+    TD_GRV,
+    TD_BSLS,
 };
 
 // Tap Dance definitions
@@ -41,6 +45,10 @@ tap_dance_action_t tap_dance_actions[] = {
     [TD_DEL_EECLR] = ACTION_TAP_DANCE_DOUBLE(KC_DEL, EE_CLR),
     [TD_PRN] = ACTION_TAP_DANCE_DOUBLE(KC_LPRN, KC_RPRN),
     [TD_BRC] = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, KC_RBRC),
+    [TD_MINS] = ACTION_TAP_DANCE_DOUBLE(KC_MINS,KC_UNDS),
+    [TD_EQL] = ACTION_TAP_DANCE_DOUBLE(KC_EQL,KC_PLUS),
+    [TD_GRV] = ACTION_TAP_DANCE_DOUBLE(KC_GRV,KC_TILD),
+    [TD_BSLS] = ACTION_TAP_DANCE_DOUBLE(KC_BSLS,KC_PIPE)
 };
 
 // TAP HOLDS
@@ -152,9 +160,9 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
         case ALT_T(KC_ESC):
             // Immediately select the hold action when another key is pressed.
             return true;
-        case ALT_T(KC_SPC):
-            // Immediately select the hold action when another key is pressed.
-            return true;
+        // case ALT_T(KC_SPC):
+        //     // Immediately select the hold action when another key is pressed.
+        //     return true;
         case LT(_NAV,KC_TAB):
             // Immediately select the hold action when another key is pressed.
             return true;
@@ -163,6 +171,18 @@ bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
             return false;
     }
 }
+
+// bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
+//     switch (keycode) {
+//         case LT_T(KC_SPC):
+//             // Immediately select the hold action when another key is tapped.
+//             return true;
+//         default:
+//             // Do not select the hold action when another key is tapped.
+//             return false;
+//     }
+// }
+
 
 // ==================== COMBO KEYS
 const uint16_t PROGMEM MINS_COMBO[] = {KC_H, KC_J, COMBO_END};
@@ -183,12 +203,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB         , KC_Q           , KC_W           , KC_E           , KC_R           , KC_T           ,            KC_Y           , KC_U          , KC_I     , KC_O     , KC_P     , KC_DEL  ,
     ALT_T(KC_ESC)  , KC_A           , KC_S           , KC_D           , KC_F           , KC_G           ,            KC_H           , KC_J          , KC_K     , KC_L     , KC_SCLN  , KC_QUOT ,
     SFT_T(KC_CAPS) , KC_Z           , KC_X           , KC_C           , KC_V           , KC_B           ,            KC_N           , KC_M          , KC_COMM  , KC_DOT   , KC_SLSH  , KC_RGUI ,
-                                                         CTL_T(KC_DEL), SFT_T(KC_ENT)  , MO(_SYM)       ,            LT(_NAV,KC_TAB), ALT_T(KC_SPC) , KC_BSPC
+                                                         CTL_T(KC_DEL), SFT_T(KC_ENT)  , MO(_SYM)       ,            LT(_NAV,KC_TAB), ALT_T(KC_SPC) , CLT_T(KC_BSPC)
     ),
 
 [_SYM] = LAYOUT_split_3x6_3(
     KC_TRNS  , KC_TRNS  , KC_7     , KC_8     , KC_9     , TD(TD_PRN)    ,             KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , EE_CLR     ,
-    KC_TRNS  , KC_TRNS  , KC_4     , KC_5     , KC_6     , TD(TD_BRC)    ,             KC_MINS  , KC_EQL   , KC_GRV   , KC_BSLS  , KC_TRNS  , KC_TRNS    ,
+    KC_TRNS  , KC_TRNS  , KC_4     , KC_5     , KC_6     , TD(TD_BRC)    ,             TD(TD_MINS)  , TD(TD_EQL)   , TD(TD_GRV)   , TD(TD_BSLS)  , KC_TRNS  , KC_TRNS    ,
     KC_TRNS  , KC_0     , KC_1     , KC_2     , KC_3     , TD(TD_CRB)    ,             KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS    ,
                                      KC_TRNS  , KC_TRNS    , KC_TRNS     ,             KC_TRNS  , KC_TRNS  , KC_TRNS
     ),

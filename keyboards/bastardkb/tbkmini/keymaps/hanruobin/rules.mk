@@ -7,8 +7,7 @@ TAP_DANCE_ENABLE = yes
 
 COMBO_ENABLE = yes
 SERIAL_DRIVER = vendor
-AUTO_SHIFT_ENABLE = no
-
+AUTO_SHIFT_ENABLE = yes
 
 
 
