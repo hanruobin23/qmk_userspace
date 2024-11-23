@@ -25,13 +25,17 @@ enum layers {
     _THIRD
 };
 
+enum custom_keycodes {          // Make sure have the awesome keycode ready
+  ALT_TAB = SAFE_RANGE,
+};
+
 //TAP DANCE CONSTRUCTION
 enum {
     TD_SPC_TAB,
     TD_DEL_EECLR,
     TD_PRN,
     TD_BRC,
-    TD_CRB,
+    TD_CBR,
     TD_MINS,
     TD_EQL,
     TD_GRV,
@@ -39,17 +43,61 @@ enum {
 };
 
 // Tap Dance definitions
+// void spc_tab_each(tap_dance_state_t *state, void *user_data) {
+//     tap_code16(KC_LPRN);
+//     switch (state->count) {
+//         // case 1:
+//             // break;
+//         case 2:
+//             tap_code16(KC_BSPC);
+//             tap_code16(KC_RPRN);
+//             break;
+//     }
+// }
+
+// void spc_tab_finished(tap_dance_state_t *state, void *user_data) {}
+// void spc_tab_reset(tap_dance_state_t *state, void *user_data) {}
+
 tap_dance_action_t tap_dance_actions[] = {
     // Tap once for Escape, twice for Caps Lock
-    [TD_SPC_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_SPC, KC_TAB),
+    [TD_SPC_TAB] = ACTION_TAP_DANCE_DOUBLE(KC_SPC,KC_TAB),
     [TD_DEL_EECLR] = ACTION_TAP_DANCE_DOUBLE(KC_DEL, EE_CLR),
     [TD_PRN] = ACTION_TAP_DANCE_DOUBLE(KC_LPRN, KC_RPRN),
     [TD_BRC] = ACTION_TAP_DANCE_DOUBLE(KC_LBRC, KC_RBRC),
+    [TD_BRC] = ACTION_TAP_DANCE_DOUBLE(KC_LCBR, KC_RCBR),
     [TD_MINS] = ACTION_TAP_DANCE_DOUBLE(KC_MINS,KC_UNDS),
     [TD_EQL] = ACTION_TAP_DANCE_DOUBLE(KC_EQL,KC_PLUS),
     [TD_GRV] = ACTION_TAP_DANCE_DOUBLE(KC_GRV,KC_TILD),
     [TD_BSLS] = ACTION_TAP_DANCE_DOUBLE(KC_BSLS,KC_PIPE)
 };
+
+bool is_alt_tab_active = false;
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    if (is_alt_tab_active) {
+        unregister_code(KC_RGUI);
+        is_alt_tab_active = false;
+    }
+    return state;
+}
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode){
+        case ALT_TAB: // super alt tab macro
+            if (record->event.pressed) {
+                if (!is_alt_tab_active) {
+                    is_alt_tab_active = true;
+                    register_code(KC_RGUI);
+                }
+                register_code(KC_TAB);
+            } else {
+                unregister_code(KC_TAB);
+            }
+            break;
+        return false;
+     }
+  return true;
+}
 
 // TAP HOLDS
 // bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -145,8 +193,8 @@ tap_dance_action_t tap_dance_actions[] = {
 //   rgblight_mode(1); // set to solid by default
 // }
 
-// ============= DEFINE HOLD ON OTHER KEY PER KEY
-bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+// ============= DEFINE PERMISSIVE HOLD PER KEY
+bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case CTL_T(KC_DEL):
             // Immediately select the hold action when another key is pressed.
@@ -200,16 +248,16 @@ combo_t key_combos[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_BASE] = LAYOUT_split_3x6_3(
-    KC_TAB         , KC_Q           , KC_W           , KC_E           , KC_R           , KC_T           ,            KC_Y           , KC_U          , KC_I     , KC_O     , KC_P     , KC_DEL  ,
+    KC_TAB         , KC_Q           , KC_W           , KC_E           , KC_R           , KC_T           ,            KC_Y           , KC_U          , KC_I     , KC_O     , KC_P     , KC_ESC  ,
     ALT_T(KC_ESC)  , KC_A           , KC_S           , KC_D           , KC_F           , KC_G           ,            KC_H           , KC_J          , KC_K     , KC_L     , KC_SCLN  , KC_QUOT ,
     SFT_T(KC_CAPS) , KC_Z           , KC_X           , KC_C           , KC_V           , KC_B           ,            KC_N           , KC_M          , KC_COMM  , KC_DOT   , KC_SLSH  , KC_RGUI ,
-                                                         CTL_T(KC_DEL), SFT_T(KC_ENT)  , MO(_SYM)       ,            LT(_NAV,KC_TAB), ALT_T(KC_SPC) , CLT_T(KC_BSPC)
+                                                         CTL_T(KC_DEL), SFT_T(KC_ENT)  , MO(_SYM)       ,            LT(_NAV,KC_TAB), ALT_T(KC_SPC) , CTL_T(KC_BSPC)
     ),
 
 [_SYM] = LAYOUT_split_3x6_3(
     KC_TRNS  , KC_TRNS  , KC_7     , KC_8     , KC_9     , TD(TD_PRN)    ,             KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , EE_CLR     ,
-    KC_TRNS  , KC_TRNS  , KC_4     , KC_5     , KC_6     , TD(TD_BRC)    ,             TD(TD_MINS)  , TD(TD_EQL)   , TD(TD_GRV)   , TD(TD_BSLS)  , KC_TRNS  , KC_TRNS    ,
-    KC_TRNS  , KC_0     , KC_1     , KC_2     , KC_3     , TD(TD_CRB)    ,             KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS    ,
+    KC_TRNS  , ALT_TAB  , KC_4     , KC_5     , KC_6     , TD(TD_BRC)    ,             TD(TD_MINS)  , TD(TD_EQL)   , TD(TD_GRV)   , TD(TD_BSLS)  , KC_TRNS  , KC_TRNS    ,
+    KC_TRNS  , KC_0     , KC_1     , KC_2     , KC_3     , TD(TD_CBR)    ,             KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS  , KC_TRNS    ,
                                      KC_TRNS  , KC_TRNS    , KC_TRNS     ,             KC_TRNS  , KC_TRNS  , KC_TRNS
     ),
 
