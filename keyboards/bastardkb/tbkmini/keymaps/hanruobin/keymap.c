@@ -351,49 +351,48 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 // }
 
 // ============= DEFINE PERMISSIVE HOLD PER KEY
-bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-    switch (keycode) {
-        case CTL_T(KC_DEL):
-            // Immediately select the hold action when another key is pressed.
-            return true;
-        case SFT_T(KC_ENT):
-            // Immediately select the hold action when another key is pressed.
-            return true;
-        case SFT_T(KC_CAPS):
-            // Immediately select the hold action when another key is pressed.
-            return true;
-        case ALT_T(KC_ESC):
-            // Immediately select the hold action when another key is pressed.
-            return true;
-        // case ALT_T(KC_SPC):
-        //     // Immediately select the hold action when another key is pressed.
-        //     return true;
-        case LT(_NAV,KC_TAB):
-            // Immediately select the hold action when another key is pressed.
-            return true;
-        default:
-            // Do not select the hold action when another key is pressed.
-            return false;
-    }
-}
-
 // bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
 //     switch (keycode) {
-//         case LT_T(KC_SPC):
-//             // Immediately select the hold action when another key is tapped.
+//         case CTL_T(KC_DEL):
+//             // Immediately select the hold action when another key is pressed.
+//             return true;
+//         case SFT_T(KC_ENT):
+//             // Immediately select the hold action when another key is pressed.
+//             return true;
+//         case SFT_T(KC_CAPS):
+//             // Immediately select the hold action when another key is pressed.
+//             return true;
+//         case ALT_T(KC_ESC):
+//             // Immediately select the hold action when another key is pressed.
+//             return true;
+//         // case ALT_T(KC_SPC):
+//         //     // Immediately select the hold action when another key is pressed.
+//         //     return true;
+//         case LT(_NAV,KC_TAB):
+//             // Immediately select the hold action when another key is pressed.
 //             return true;
 //         default:
-//             // Do not select the hold action when another key is tapped.
+//             // Do not select the hold action when another key is pressed.
 //             return false;
 //     }
 // }
 
+// ======================== DEFINE TAPPING TERM PER KEY ============================
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case SFT_T(KC_ENT):
+            // return TAPPING_TERM + 1250;
+            return TAPPING_TERM - 50;
+        default:
+            return TAPPING_TERM;
+    }
+}
 
 // ==================== COMBO KEYS
 const uint16_t PROGMEM MINS_COMBO[] = {KC_H, KC_J, COMBO_END};
 const uint16_t PROGMEM EQL_COMBO[] = {KC_J, KC_K, COMBO_END};
-// const uint16_t PROGMEM GRV_COMBO[] = {KC_K, KC_L, COMBO_END};
-const uint16_t PROGMEM BSLS_COMBO[] = {KC_K, KC_L, COMBO_END};
+const uint16_t PROGMEM GRV_COMBO[] = {KC_K, KC_L, COMBO_END};
+const uint16_t PROGMEM BSLS_COMBO[] = {KC_L, KC_SCLN, COMBO_END};
 const uint16_t PROGMEM LE_COMBO[] = {KC_M, KC_COMM, COMBO_END};
 const uint16_t PROGMEM NE_COMBO[] = {KC_COMM, KC_DOT, COMBO_END};
 const uint16_t PROGMEM GE_COMBO[] = {KC_DOT, KC_SLSH, COMBO_END};
@@ -410,11 +409,12 @@ const uint16_t PROGMEM GE_COMBO[] = {KC_DOT, KC_SLSH, COMBO_END};
 const uint16_t PROGMEM LPRN_COMBO[] = {KC_R, KC_T, COMBO_END};
 const uint16_t PROGMEM LBRC_COMBO[] = {KC_F, KC_G, COMBO_END};
 const uint16_t PROGMEM LCBR_COMBO[] = {KC_V, KC_B, COMBO_END};
+const uint16_t PROGMEM CSENT_COMBO[] = {KC_F, KC_G, COMBO_END};
 
 combo_t key_combos[] = {
     COMBO(MINS_COMBO, KC_MINS),
     COMBO(EQL_COMBO, KC_EQL), // keycodes with modifiers are possible too!
-    // COMBO(GRV_COMBO,KC_GRV),
+    COMBO(GRV_COMBO,KC_GRV),
     COMBO(BSLS_COMBO,KC_BSLS),
     // COMBO(ZERO_COMBO,KC_0),
     // COMBO(ONE_COMBO,KC_1),
@@ -428,7 +428,8 @@ combo_t key_combos[] = {
     // COMBO(NINE_COMBO,KC_9),
     COMBO(LPRN_COMBO,KC_LPRN),
     COMBO(LBRC_COMBO,KC_LBRC),
-    COMBO(LCBR_COMBO,KC_LCBR)
+    COMBO(LCBR_COMBO,KC_LCBR),
+    COMBO(CSENT_COMBO,LCTL(LSFT(KC_ENT)))
 };
 
 // RGB for caps lock
@@ -493,10 +494,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
 [_SYM] = LAYOUT_split_3x6_3(
-    _______  , _______  , KC_7     , KC_8     , KC_9     , TD(TD_PRN)    ,             KC_RPRN  , _______     , _______   , _______  , _______  , EE_CLR     ,
-    _______  , ALT_TAB  , KC_4     , KC_5     , KC_6     , TD(TD_BRC)    ,             KC_RBRC  ,TD(TD_MINS)  , TD(TD_EQL), TD(TD_GRV)   , TD(TD_BSLS)  , _______    ,
-    _______  , KC_0     , KC_1     , KC_2     , KC_3     , TD(TD_CBR)    ,             KC_RCBR  , _______  , _______  , _______  , _______  , _______    ,
-                                     _______  , _______    , _______     ,             _______  , _______  , _______
+    _______                   , _______  , KC_7     , KC_8     , KC_9     , TD(TD_PRN)    ,             KC_RPRN  , _______     , _______   , _______  , _______  , EE_CLR     ,
+    OSM(MOD_LCTL | MOD_LALT)  , ALT_TAB  , KC_4     , KC_5     , KC_6     , TD(TD_BRC)    ,             KC_RBRC  ,TD(TD_MINS)  , TD(TD_EQL), TD(TD_GRV)   , TD(TD_BSLS)  , _______    ,
+    _______                   , KC_0     , KC_1     , KC_2     , KC_3     , TD(TD_CBR)    ,             KC_RCBR  , _______  , _______  , _______  , _______  , _______    ,
+                                                      _______  , _______  , KC_0          ,             _______  , _______  , _______
     ),
 
 [_NAV] = LAYOUT_split_3x6_3(

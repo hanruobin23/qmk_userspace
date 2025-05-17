@@ -34,8 +34,10 @@
 
 // reduce holding duration to be triggered as a hold
 #define TAPPING_TERM 170
+#define TAPPING_TERM_PER_KEY
 // #define HOLD_ON_OTHER_KEY_PRESS_PER_KEY
-#define PERMISSIVE_HOLD_PER_KEY
+// #define PERMISSIVE_HOLD_PER_KEY
+#define HOLD_ON_OTHER_KEY_PRESS
 // #define TAPPING_TOGGLE 1
 // #define AUTO_SHIFT_TIMEOUT 160
 #define RGBLIGHT_DEFAULT_MODE RGBLIGHT_MODE_STATIC_LIGHT
