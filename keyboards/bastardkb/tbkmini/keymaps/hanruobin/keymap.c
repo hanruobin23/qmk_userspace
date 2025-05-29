@@ -22,11 +22,17 @@ enum layers {
     _BASE,
     _SYM,
     _NAV,
-    _THIRD
+    _KSC
 };
 
 enum custom_keycodes {          // Make sure have the awesome keycode ready
   ALT_TAB = SAFE_RANGE,
+  VSC_CMNT,
+  VSC_UNCMNT,
+  VSC_CLPS,
+  VSC_XPND,
+  VSC_CLPS_ALL,
+  VSC_XPND_ALL
 };
 
 //TAP DANCE CONSTRUCTION
@@ -251,6 +257,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_TAB);
             }
             break;
+        case VSC_CMNT:
+            if (record->event.pressed) {
+                tap_code16(C(KC_K));
+                tap_code16(C(KC_C));
+            } else {}
+            break;
+        case VSC_UNCMNT:
+            if (record->event.pressed) {
+                tap_code16(C(KC_K));
+                tap_code16(C(KC_U));
+            } else {}
+            break;
+        case VSC_CLPS:
+            if (record->event.pressed) {
+                tap_code16(C(KC_K));
+                tap_code16(C(KC_RBRC));
+            } else {}
+            break;
+        case VSC_XPND:
+            if (record->event.pressed) {
+                tap_code16(C(KC_K));
+                tap_code16(C(KC_LBRC));
+            } else {}
+            break;
+        case VSC_CLPS_ALL:
+            if (record->event.pressed) {
+                tap_code16(C(KC_K));
+                tap_code16(C(KC_0));
+            } else {}
+            break;
+        case VSC_XPND_ALL:
+            if (record->event.pressed) {
+                tap_code16(C(KC_K));
+                tap_code16(C(KC_J));
+            } else {}
+            break;
         return false;
      }
   return true;
@@ -350,38 +392,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 //   rgblight_mode(1); // set to solid by default
 // }
 
-// ============= DEFINE PERMISSIVE HOLD PER KEY
-// bool get_permissive_hold(uint16_t keycode, keyrecord_t *record) {
-//     switch (keycode) {
-//         case CTL_T(KC_DEL):
-//             // Immediately select the hold action when another key is pressed.
-//             return true;
-//         case SFT_T(KC_ENT):
-//             // Immediately select the hold action when another key is pressed.
-//             return true;
-//         case SFT_T(KC_CAPS):
-//             // Immediately select the hold action when another key is pressed.
-//             return true;
-//         case ALT_T(KC_ESC):
-//             // Immediately select the hold action when another key is pressed.
-//             return true;
-//         // case ALT_T(KC_SPC):
-//         //     // Immediately select the hold action when another key is pressed.
-//         //     return true;
-//         case LT(_NAV,KC_TAB):
-//             // Immediately select the hold action when another key is pressed.
-//             return true;
-//         default:
-//             // Do not select the hold action when another key is pressed.
-//             return false;
-//     }
-// }
+// ============= DEFINE HOLD ON OTHER KEY PRESS PER KEY
+bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case SFT_T(KC_ENT):
+            // Immediately select the hold action when another key is pressed.
+            return true;
+        default:
+            // Do not select the hold action when another key is pressed.
+            return false;
+    }
+}
 
 // ======================== DEFINE TAPPING TERM PER KEY ============================
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case SFT_T(KC_ENT):
-            // return TAPPING_TERM + 1250;
             return TAPPING_TERM - 50;
         default:
             return TAPPING_TERM;
@@ -392,7 +418,7 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 const uint16_t PROGMEM MINS_COMBO[] = {KC_H, KC_J, COMBO_END};
 const uint16_t PROGMEM EQL_COMBO[] = {KC_J, KC_K, COMBO_END};
 const uint16_t PROGMEM GRV_COMBO[] = {KC_K, KC_L, COMBO_END};
-const uint16_t PROGMEM BSLS_COMBO[] = {KC_L, KC_SCLN, COMBO_END};
+const uint16_t PROGMEM BSLS_COMBO[] = {TD(TD_SCLN), KC_L, COMBO_END};
 const uint16_t PROGMEM LE_COMBO[] = {KC_M, KC_COMM, COMBO_END};
 const uint16_t PROGMEM NE_COMBO[] = {KC_COMM, KC_DOT, COMBO_END};
 const uint16_t PROGMEM GE_COMBO[] = {KC_DOT, KC_SLSH, COMBO_END};
@@ -406,10 +432,13 @@ const uint16_t PROGMEM GE_COMBO[] = {KC_DOT, KC_SLSH, COMBO_END};
 // const uint16_t PROGMEM SEVEN_COMBO[] = {KC_Q, KC_W, COMBO_END};
 // const uint16_t PROGMEM EIGHT_COMBO[] = {KC_W, KC_E, COMBO_END};
 // const uint16_t PROGMEM NINE_COMBO[] = {KC_E, KC_R, COMBO_END};
-const uint16_t PROGMEM LPRN_COMBO[] = {KC_R, KC_T, COMBO_END};
-const uint16_t PROGMEM LBRC_COMBO[] = {KC_F, KC_G, COMBO_END};
-const uint16_t PROGMEM LCBR_COMBO[] = {KC_V, KC_B, COMBO_END};
+// const uint16_t PROGMEM LPRN_COMBO[] = {KC_R, KC_T, COMBO_END};
+// const uint16_t PROGMEM LBRC_COMBO[] = {KC_F, KC_G, COMBO_END};
+// const uint16_t PROGMEM LCBR_COMBO[] = {KC_V, KC_B, COMBO_END};
 const uint16_t PROGMEM CSENT_COMBO[] = {KC_F, KC_G, COMBO_END};
+const uint16_t PROGMEM L_ENT_COMBO[] = {KC_S, KC_D, KC_F, COMBO_END};
+const uint16_t PROGMEM R_ENT_COMBO[] = {KC_J, KC_K, KC_L, COMBO_END};
+const uint16_t PROGMEM KSC_COMBO[] = {KC_V, KC_B, COMBO_END};
 
 combo_t key_combos[] = {
     COMBO(MINS_COMBO, KC_MINS),
@@ -426,20 +455,22 @@ combo_t key_combos[] = {
     // COMBO(SEVEN_COMBO,KC_7),
     // COMBO(EIGHT_COMBO,KC_8),
     // COMBO(NINE_COMBO,KC_9),
-    COMBO(LPRN_COMBO,KC_LPRN),
-    COMBO(LBRC_COMBO,KC_LBRC),
-    COMBO(LCBR_COMBO,KC_LCBR),
-    COMBO(CSENT_COMBO,LCTL(LSFT(KC_ENT)))
+    // COMBO(LPRN_COMBO,KC_LPRN),
+    // COMBO(LBRC_COMBO,KC_LBRC),
+    // COMBO(LCBR_COMBO,KC_LCBR),
+    COMBO(CSENT_COMBO,LCTL(LSFT(KC_ENT))),
+    COMBO(L_ENT_COMBO,KC_ENT),
+    COMBO(R_ENT_COMBO,KC_ENT),
+    COMBO(KSC_COMBO,OSL(_KSC))
 };
 
 // RGB for caps lock
 // extern rgblight_config_t rgblight_config;
 
-uint32_t mode;
-uint16_t hue;
-uint8_t sat;
-uint8_t val;
-
+// uint32_t mode;
+// uint16_t hue;
+// uint8_t sat;
+// uint8_t val;
 // void matrix_init_user(void)
 // {
 //     mode = rgblight_get_mode();
@@ -448,22 +479,50 @@ uint8_t val;
 //     val = rgblight_get_val();
 // }
 
-bool led_update_user(led_t led_state) {
-    static uint8_t caps_state = 0;
-    if (caps_state != led_state.caps_lock) {
-        if (led_state.caps_lock==1) {
-        mode = rgblight_get_mode();
-        hue = rgblight_get_hue();
-        sat = rgblight_get_sat();
-        val = rgblight_get_val();
+// typedef union {
+//     uint64_t raw;
+//     struct {
+//         uint32_t mode;
+//         uint16_t hue;
+//         uint8_t sat;
+//         uint8_t val;
+//     };
+// } user_config_t;
 
+// static user_config_t user_config = {0};
+
+// void keyboard_post_init_user(void) {
+//     // Read the EEPROM data
+//     user_config.raw = eeconfig_read_user();
+//     mode = user_config.mode;
+//     hue = user_config.hue;
+//     sat = user_config.sat;
+//     val = user_config.val;
+// }
+
+bool led_update_user(led_t led_state) {
+    if (IS_LAYER_ON(_BASE)){
+        if (led_state.caps_lock) {
+            rgblight_mode_noeeprom(1);
+            rgblight_sethsv_noeeprom(HSV_RED);
+            }
+        else {
+            // rgblight_mode_noeeprom(35);
+            // rgblight_sethsv_noeeprom(1,255,255);
+            // rgblight_mode_noeeprom(1);
+            // rgblight_sethsv_noeeprom(HSV_WHITE);
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_GRADIENT_LEFT_RIGHT);
+            rgblight_sethsv_noeeprom(HSV_RED);
+            }
+    } else if (IS_LAYER_ON(_SYM)) {
         rgblight_mode_noeeprom(1);
-        rgblight_sethsv(HSV_RED);
-        } else {
-        rgblight_mode(mode);
-        rgblight_sethsv(hue, sat, val);
-        }
-        caps_state = led_state.caps_lock;
+        rgblight_sethsv_noeeprom(HSV_GREEN);
+    } else if (IS_LAYER_ON(_NAV)) {
+        rgblight_mode_noeeprom(1);
+        rgblight_sethsv_noeeprom(HSV_PURPLE);
+    } else if (IS_LAYER_ON(_KSC)) {
+        rgblight_mode_noeeprom(1);
+        rgblight_sethsv_noeeprom(HSV_BLUE);
     }
     return true;
 }
@@ -490,7 +549,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     CTL_T(KC_ESC)  , KC_Q           , KC_W           , KC_E           , KC_R           , KC_T           ,            KC_Y           , KC_U          , KC_I     , KC_O     , KC_P         , CTL_T(KC_PSCR)     ,
     ALT_T(KC_TAB)  , KC_A           , KC_S           , KC_D           , KC_F           , KC_G           ,            KC_H           , KC_J          , KC_K     , KC_L     , TD(TD_SCLN)  , TD(TD_QUOT) ,
     SFT_T(KC_CAPS) , KC_Z           , KC_X           , KC_C           , KC_V           , KC_B           ,            KC_N           , KC_M          , TD(TD_COMM)  , TD(TD_DOT)   , TD(TD_SLSH)  , KC_RGUI ,
-                                                       CTL_T(KC_DEL)  , SFT_T(KC_ENT)  , MO(_SYM)       ,            LT(_NAV,KC_TAB), ALT_T(KC_SPC) , KC_BSPC
+                                                       CTL_T(KC_DEL)  , SFT_T(KC_ENT)  , LT(_SYM,OSL(_KSC))       ,            LT(_NAV,KC_TAB), LT(_SYM,KC_SPC) , KC_BSPC
     ),
 
 [_SYM] = LAYOUT_split_3x6_3(
@@ -507,11 +566,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                      _______  , _______  , _______  ,             _______  , _______  , _______
     ),
 
-[_THIRD] = LAYOUT_split_3x6_3(
-    _______  , KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO    ,             KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO      ,
-    _______  , _______  , _______  , _______  , KC_NO    , KC_NO    ,             KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO      ,
-    _______  , _______  , _______  , _______  , KC_NO    , KC_NO    ,             KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO      ,
-                                     _______  , _______  , _______  ,             _______  , _______  , _______
+[_KSC] = LAYOUT_split_3x6_3(
+    _______  , KC_NO    , KC_NO    , KC_NO    , VSC_CLPS_ALL, VSC_XPND_ALL ,             KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO      ,
+    _______  , _______  , _______  , C(KC_BSLS)  , VSC_CLPS , VSC_XPND  ,             KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO      ,
+    _______  , _______  , _______  , _______  , VSC_CMNT , VSC_UNCMNT,             KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO    , KC_NO      ,
+                                     _______  , _______  , _______   ,             _______  , _______  , _______
     )
 
 };
