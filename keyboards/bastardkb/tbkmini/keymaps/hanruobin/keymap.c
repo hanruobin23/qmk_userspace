@@ -51,6 +51,7 @@ enum {
     TD_COMM,
     TD_DOT,
     TD_SLSH,
+    TD_BOOT,
     // TD_BSPC
 };
 
@@ -231,7 +232,7 @@ tap_dance_action_t tap_dance_actions[] = {
     // [TD_SLSH] = ACTION_TAP_DANCE_DOUBLE(KC_SLSH,KC_QUES),
     [TD_SLSH] = ACTION_TAP_DANCE_FN_ADVANCED(slsh_each, null_finished, null_reset),
     // [TD_BSPC] = ACTION_TAP_DANCE_DOUBLE(KC_BSPC,C(KC_BSPC)),
-
+    [TD_BOOT] = ACTION_TAP_DANCE_DOUBLE(KC_NO,QK_BOOT)
 };
 
 bool is_alt_tab_active = false;
@@ -241,7 +242,38 @@ layer_state_t layer_state_set_user(layer_state_t state) {
         unregister_code(KC_RALT);
         is_alt_tab_active = false;
     }
+    switch (get_highest_layer(state)) {
+        case _BASE:
+            rgb_matrix_mode_noeeprom(RGB_MATRIX_GRADIENT_LEFT_RIGHT);
+            rgblight_sethsv_noeeprom(HSV_RED);
+            break;
+
+        case _SYM:
+            rgblight_mode_noeeprom(1);
+            rgblight_sethsv_noeeprom(HSV_GREEN);
+            break;
+
+        case _NAV:
+            rgblight_mode_noeeprom(1);
+            rgblight_sethsv_noeeprom(HSV_YELLOW);
+            break;
+
+        case _KSC:
+            rgblight_mode_noeeprom(1);
+            rgblight_sethsv_noeeprom(HSV_PURPLE);
+            break;
+    }
     return state;
+}
+
+bool led_update_user(led_t led_state) {
+    if (led_state.caps_lock) {
+        rgblight_mode_noeeprom(1);
+        rgblight_sethsv_noeeprom(HSV_RED);
+    } else {
+        layer_state_set_user(layer_state);
+    }
+    return true;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
@@ -297,100 +329,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
      }
   return true;
 }
-
-// TAP HOLDS
-// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-//     switch (keycode) {
-//         case LT(_BASE,KC_T):
-//             if (!record->tap.count && record->event.pressed) {
-//                 tap_code16(G(KC_T)); // Intercept hold function to send Ctrl-Z
-//                 return false;
-//             }
-//         case LT(_BASE,KC_A):
-//             if (!record->tap.count && record->event.pressed) {
-//                 tap_code16(G(KC_A)); // Intercept hold function to send Ctrl-Z
-//                 return false;
-//             }
-//             return true;             // Return true for normal processing of tap keycode
-//         case LT(_BASE,KC_S):
-//             if (!record->tap.count && record->event.pressed) {
-//                 tap_code16(G(KC_S)); // Intercept hold function to send Ctrl-Z
-//                 return false;
-//             }
-//             return true;             // Return true for normal processing of tap keycode
-//         case LT(_BASE,KC_Z):
-//             if (!record->tap.count && record->event.pressed) {
-//                 tap_code16(G(KC_Z)); // Intercept hold function to send Ctrl-Z
-//                 return false;
-//             }
-//             return true;             // Return true for normal processing of tap keycode
-//         case LT(_BASE,KC_X):
-//             if (!record->tap.count && record->event.pressed) {
-//                 tap_code16(G(KC_X)); // Intercept hold function to send Ctrl-X
-//                 return false;
-//             }
-//             return true;             // Return true for normal processing of tap keycode
-//         case LT(_BASE,KC_C):
-//             if (!record->tap.count && record->event.pressed) {
-//                 tap_code16(G(KC_C)); // Intercept hold function to send Ctrl-C
-//                 return false;
-//             }
-//             return true;             // Return true for normal processing of tap keycode
-//         case LT(_BASE,KC_V):
-//             if (!record->tap.count && record->event.pressed) {
-//                 tap_code16(G(KC_V)); // Intercept hold function to send Ctrl-V
-//                 return false;
-//             }
-//             return true;             // Return true for normal processing of tap keycode
-//         case LT(_BASE,KC_Y):
-//             if (!record->tap.count && record->event.pressed) {
-//                 tap_code16(G(KC_Y)); // Intercept hold function to send Ctrl-V
-//                 return false;
-//             }
-//             return true;             // Return true for normal processing of tap keycode
-//         case LT(_BASE,KC_N):
-//             if (!record->tap.count && record->event.pressed) {
-//                 tap_code16(G(KC_N)); // Intercept hold function to send Ctrl-V
-//                 return false;
-//             }
-//             return true;             // Return true for normal processing of tap keycode
-//         case LT(_BASE,KC_BSPC):
-//             if (!record->tap.count && record->event.pressed) {
-//                 tap_code16(A(KC_BSPC)); // Intercept hold function to send Ctrl-BSPC
-//                 return false;
-//             }
-//             return true;             // Return true for normal processing of tap keycode
-//     }
-//     return true;
-// }
-
-// FAILED RGB LIGHTING
-
-// extern rgblight_config_t rgblight_config;
-// void keyboard_post_init_user(void) {
-//   rgblight_enable_noeeprom();
-//   rgblight_sethsv_noeeprom(HSV_ORANGE); // or even sth. like rgblight_sethsv_noeeprom(HSV_TEAL);
-// }
-
-// typedef union {
-//   uint32_t raw;
-//   struct {
-//     bool     rgb_layer_change :1;
-//   };
-// } user_config_t;
-
-// user_config_t user_config;
-
-// void eeconfig_init_user(void) {  // EEPROM is getting reset!
-//   user_config.raw = 0;
-//   user_config.rgb_layer_change = true; // We want this enabled by default
-//   eeconfig_update_user(user_config.raw); // Write default value to EEPROM now
-
-//   // use the non noeeprom versions, to write these values to EEPROM too
-//   rgblight_enable(); // Enable RGB by default
-//   rgblight_sethsv(HSV_ORANGE);  // Set it to CYAN by default
-//   rgblight_mode(1); // set to solid by default
-// }
 
 // ============= DEFINE HOLD ON OTHER KEY PRESS PER KEY
 bool get_hold_on_other_key_press(uint16_t keycode, keyrecord_t *record) {
@@ -464,85 +402,6 @@ combo_t key_combos[] = {
     COMBO(KSC_COMBO,OSL(_KSC))
 };
 
-// RGB for caps lock
-// extern rgblight_config_t rgblight_config;
-
-// uint32_t mode;
-// uint16_t hue;
-// uint8_t sat;
-// uint8_t val;
-// void matrix_init_user(void)
-// {
-//     mode = rgblight_get_mode();
-//     hue = rgblight_get_hue();
-//     sat = rgblight_get_sat();
-//     val = rgblight_get_val();
-// }
-
-// typedef union {
-//     uint64_t raw;
-//     struct {
-//         uint32_t mode;
-//         uint16_t hue;
-//         uint8_t sat;
-//         uint8_t val;
-//     };
-// } user_config_t;
-
-// static user_config_t user_config = {0};
-
-// void keyboard_post_init_user(void) {
-//     // Read the EEPROM data
-//     user_config.raw = eeconfig_read_user();
-//     mode = user_config.mode;
-//     hue = user_config.hue;
-//     sat = user_config.sat;
-//     val = user_config.val;
-// }
-
-bool led_update_user(led_t led_state) {
-    if (IS_LAYER_ON(_BASE)){
-        if (led_state.caps_lock) {
-            rgblight_mode_noeeprom(1);
-            rgblight_sethsv_noeeprom(HSV_RED);
-            }
-        else {
-            // rgblight_mode_noeeprom(35);
-            // rgblight_sethsv_noeeprom(1,255,255);
-            // rgblight_mode_noeeprom(1);
-            // rgblight_sethsv_noeeprom(HSV_WHITE);
-            rgb_matrix_mode_noeeprom(RGB_MATRIX_GRADIENT_LEFT_RIGHT);
-            rgblight_sethsv_noeeprom(HSV_RED);
-            }
-    } else if (IS_LAYER_ON(_SYM)) {
-        rgblight_mode_noeeprom(1);
-        rgblight_sethsv_noeeprom(HSV_GREEN);
-    } else if (IS_LAYER_ON(_NAV)) {
-        rgblight_mode_noeeprom(1);
-        rgblight_sethsv_noeeprom(HSV_PURPLE);
-    } else if (IS_LAYER_ON(_KSC)) {
-        rgblight_mode_noeeprom(1);
-        rgblight_sethsv_noeeprom(HSV_BLUE);
-    }
-    return true;
-}
-
-// void led_set_user(uint8_t usb_led) {
-//   if (usb_led & (1<<USB_LED_CAPS_LOCK)) {
-//     mode = rgblight_get_mode();
-//     hue = rgblight_get_hue();
-//     sat = rgblight_get_sat();
-//     val = rgblight_get_val();
-
-//     rgblight_mode_noeeprom(1);
-//     // rgblight_setrgb(0xD3, 0x7F, 0xED);
-//     rgblight_sethsv(HSV_RED);
-//   } else {
-//     rgblight_mode(mode);
-//     rgblight_sethsv(hue, sat, val);
-//   }
-// }
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_BASE] = LAYOUT_split_3x6_3(
@@ -553,7 +412,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
 
 [_SYM] = LAYOUT_split_3x6_3(
-    _______                   , _______  , KC_7     , KC_8     , KC_9     , TD(TD_PRN)    ,             KC_RPRN  , _______     , _______   , _______  , _______  , EE_CLR     ,
+    TD(TD_BOOT)               , _______  , KC_7     , KC_8     , KC_9     , TD(TD_PRN)    ,             KC_RPRN  , _______     , _______   , _______  , _______  , _______     ,
     OSM(MOD_LCTL | MOD_LALT)  , ALT_TAB  , KC_4     , KC_5     , KC_6     , TD(TD_BRC)    ,             KC_RBRC  ,TD(TD_MINS)  , TD(TD_EQL), TD(TD_GRV)   , TD(TD_BSLS)  , _______    ,
     _______                   , KC_0     , KC_1     , KC_2     , KC_3     , TD(TD_CBR)    ,             KC_RCBR  , _______  , _______  , _______  , _______  , _______    ,
                                                       _______  , _______  , KC_0          ,             _______  , _______  , _______
